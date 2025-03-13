@@ -9,6 +9,7 @@ const Button = ({text, onClick}) => <button onClick={onClick}>{text}</button>
 
 const Stats = ({text, data}) => <p>{text} {data}</p>
 
+
 const Statistics = (props) => {
   return (
     <div>
@@ -40,14 +41,17 @@ const App = () => {
       <Button text={"Neutral"} onClick={() => handleClick(setNeutral,neutral)}/>
       <Button text={"Bad"} onClick={() => handleClick(setBad,bad)}/>
       <Headings title={"Statistics"} />
-      <Statistics 
+      {
+        good === 0 && neutral === 0 && bad === 0 ?
+        <p>No feedback given</p>:
+        <Statistics 
         good={good} 
         neutral={neutral} 
         bad={bad}
         total={total}
         average={average}
         positive={positive}
-      />
+      />}
     </div>
   )
 }
