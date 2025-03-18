@@ -1,26 +1,69 @@
 import { useState } from 'react'
 
-const App = () => {
-  const anecdotes = [
-    'If it hurts, do it more often.',
-    'Adding manpower to a late software project makes it later!',
-    'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-    'Premature optimization is the root of all evil.',
-    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
-    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
-    'The only way to go fast, is to go well.'
-  ]
-   
-  const [selected, setSelected] = useState(0)
 
-  const handleClick = () =>  setSelected(Math.floor(Math.random() * anecdotes.length))
+const Headings = ({ title }) => <h1>{title}</h1>
+
+const handleClick = (setCount, count) => setCount(count + 1)
+
+const Button = ({ text, onClick }) => <button onClick={onClick}>{text}</button>
+
+const Stats = ({ text, data }) => <tr><td>{text}</td><td> {data}</td></tr>
+
+const ButtonGroup = (props) => {
+  return (
+    <div>
+      <Button text={props.text1} onClick={props.onClick1} />
+      <Button text={props.text2} onClick={props.onClick2} />
+      <Button text={props.text3} onClick={props.onClick3} />
+    </div>
+  )
+}
+
+
+const Statistics = (props) => {
+  return (
+    <table>
+      <Stats text={props.text1} data={props.data1} />  
+      <Stats text={props.text2} data={props.data2} />
+      <Stats text={props.text3} data={props.data3} />      
+      <Stats text={props.text4} data={props.data4} /> 
+      <Stats text={props.text5} data={props.data5} /> 
+      <Stats text={props.text6} data={props.data6} />
+    </table>
+  )
+}
+
+
+const App = () => {
+
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+  const total = good + neutral + bad;
+  const average = (good - bad) === 0 ? 0 : (good - bad) / total;
+  const positive = good === 0 ? 0 : (good / total) * 100;
 
   return (
     <div>
-      {anecdotes[selected]}
-      <br/>
-      <button onClick={() => handleClick()}>next anecdotes</button>
+      <Headings title={"Give feedback"} />
+      <ButtonGroup
+        text1={"Good"} onClick1={() => handleClick(setGood, good)}
+        text2={"Neutral"} onClick2={() => handleClick(setNeutral, neutral)}
+        text3={"Bad"} onClick3={() => handleClick(setBad, bad)}
+      />
+      <Headings title={"Statistics"} />
+      {
+        good === 0 && neutral === 0 && bad === 0 ?
+          <p>No feedback given</p> :
+          <Statistics
+            text1={"Good: "} data1={good}
+            text2={"Neutral: "} data2={neutral}
+            text3={"Bad: "} data3={bad}
+            text4={"All: "} data4={total}
+            text5={"Average: "} data5={average}
+            text6={"Positive: "} data6={`${positive} %`}
+          />}
     </div>
   )
 }
