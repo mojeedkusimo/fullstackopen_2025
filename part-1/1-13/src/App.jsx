@@ -17,15 +17,23 @@ const App = () => {
 
   const handleClick = () =>  setSelected(Math.floor(Math.random() * anecdotes.length))
 
-  const handleVote = (e) => {}
+  const handleVote = () => {
+    const currentVotesArray = [...votes];
+    currentVotesArray[selected] += 1;
+    setVotes(currentVotesArray);
+  }
 
+  // console.log(votes);
+  // console.log(selected);
 
   return (
     <div>
       {anecdotes[selected]}
       <br/>
+      <b>has {votes[selected]} votes</b>
+      <br/>
       <button onClick={() => handleClick()}>next anecdotes</button>
-      <button onClick={(e) => handleVote(e)}>vote</button>
+      <button onClick={() => handleVote()}>vote</button>
     </div>
   )
 }
