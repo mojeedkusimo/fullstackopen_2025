@@ -14,7 +14,7 @@ const DisplayData = ({ filteredCountries, selectOneCountry }) => {
     <div>
       {
         filteredCountries.length > 10 ? <p>Too many matches, specify another filter</p> :
-          filteredCountries.length === 1 ? <CountryDetails country={filteredCountries[0]} /> :
+          filteredCountries.length === 1 ? null :
             filteredCountries.map(country =>
               <p key={country.name.common}>{country.name.common}
                 <button onClick={() => selectOneCountry(country.name.common)}>more</button>
@@ -25,7 +25,7 @@ const DisplayData = ({ filteredCountries, selectOneCountry }) => {
 }
 
 const CountryDetails = ({ country }) => {
-console.log(country);
+  console.log(country);
   if (!country) return null;
   return (
     <div>
@@ -50,6 +50,8 @@ const App = () => {
 
   const handleSearch = (event) => {
     setSearchName(event.target.value);
+    setOneCountryView(null);
+
     axios
       .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
       .then(response => {
@@ -72,14 +74,20 @@ const App = () => {
       .catch(error => {
         console.error("Error fetching country details: ", error);
       });
-    // setOneCountryView(country);
   }
   return (
     <div>
       <h1>Countries</h1>
       <CountrySearch searchName={searchName} handleSearch={handleSearch} />
-      <DisplayData filteredCountries={filteredCountries} selectOneCountry={selectOneCountry} />
-      <CountryDetails country={oneCountryView}/>
+      <DisplayData filteredCountries={filteredCountries}
+        selectOneCountry={selectOneCountry} />
+      {
+        filteredCountries.length === 1 ?
+          <CountryDetails country={filteredCountries[0]} /> :
+          <CountryDetails country={oneCountryView} />
+      }
+
+
     </div>
   )
 }
